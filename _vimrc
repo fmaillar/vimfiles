@@ -1,0 +1,165 @@
+" VIM Configuration
+" Affiche un ASCII-art caractere
+" echo ">^.^<" 
+" Annule la compatibilité avec l'ancêtre Vi : totalement indispensable
+set nocompatible
+" -- Affichage
+set title " Met a jour le titre de votre fenêtre ou de
+" votre terminal
+set encoding=utf-8
+set number " Affiche le numéro des lignes
+set ruler " Affiche la position actuelle du curseur
+set wrap " Affiche les lignes trop longues sur plusieurs
+" lignes
+set scrolloff=3 " Affiche un minimum de 3 lignes autour du curseur
+" (pour le scroll)
+" -- Recherche
+set ignorecase " Ignore la casse lors d'une recherche
+set smartcase " Si une recherche contient une majuscule,
+" re-active la sensibilité a la casse
+set incsearch " Surligne les résultats de recherche pendant la
+" saisie
+set hlsearch " Surligne les résultats de recherche
+" -- Beep
+set visualbell " Empêche Vim de beeper
+set noerrorbells " Empêche Vim de beeper
+" Active le comportement 'habituel' de la touche retour en arrière
+set backspace=indent,eol,start
+" Cache les fichiers lors de l'ouverture d'autres fichiers
+set hidden
+" Active la coloration syntaxique
+syntax enable
+" Active les comportements spécifiques aux types de fichiers comme
+" la syntaxe et l'indentation
+filetype on
+filetype plugin indent on
+" Utilise la version sombre de Solarized
+set background=light
+colorscheme solarized
+set antialias
+if has("gui_running")
+  if has("gui_gtk2")
+    set guifont=Inconsolata\ 12
+  elseif has("gui_macvim")
+    set guifont=Menlo\ Regular:h14
+  elseif has("gui_win32")
+    set guifont=Consolas:h11:cANSI
+  endif
+endif
+" Orthographe
+set spelllang=en,fr
+" Completion
+set dictionary+=~/.vim/dela-fr-public.dic
+" set dictionary+=~/.vim/dela-en-public.dic
+set thesaurus+=~/vim/dela-fr-public.dic
+set complete+=kspell
+" pour l'indentation, une tabulation est remplacee par 4 espaces
+set expandtab
+set tabstop=4
+set shiftwidth=4
+" wrap line at 80 characters
+set textwidth=80
+call plug#begin('~/.vim/plugged')
+
+" Make sure you use single quotes
+
+" Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
+Plug 'junegunn/vim-easy-align'
+
+" Any valid git URL is allowed
+Plug 'https://github.com/junegunn/vim-github-dashboard.git'
+
+" Multiple Plug commands can be written in a single line using | separators
+"Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+
+" On-demand loading
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
+
+" Using a non-default branch
+Plug 'rdnetto/YCM-Generator', { 'branch': 'stable' }
+
+" Using a tagged release; wildcard allowed (requires git 1.9.2 or above)
+Plug 'fatih/vim-go', { 'tag': '*' }
+
+" Plugin options
+Plug 'nsf/gocode', { 'tag': 'v.20150303', 'rtp': 'vim' }
+
+" Plugin outside ~/.vim/plugged with post-update hook
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+
+" Unmanaged plugin (manually installed and updated)
+" Plug '~/my-prototype-plugin'
+
+" Vim Markdtown
+"
+Plug 'godlygeek/tabular'
+Plug 'plasticboy/vim-markdown'
+"
+" ColorSchemes
+Plug 'flazz/vim-colorschemes'
+"
+" Vim Airline
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+" Vim battery
+Plug 'lambdalisue/battery.vim'
+"
+" Vim Latex
+Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' } 
+" Initialize plugin system
+" Vim journal
+let g:journal_dir = "/users/e_fmaill/journals/"
+Plug 'cympfh/journal.vim'
+let g:journl_new= "<C-j><C-j> " " default
+"
+" Dictionnaries
+Plug 'szw/vim-dict'
+" Vim-Tex
+Plug 'lervag/vimtex'
+call plug#end()
+"
+" Start NERDTree automatically
+autocmd vimenter * NERDTree | wincmd p
+" Exit Vim if NERDTree is the only window left.
+autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+"
+let g:airline_theme = 'light'
+" displays all buffers when there's only one tab open
+let g:airline#extensions#tabline#enabled = 1
+"
+" Separators can be configured independently for the tabline, so here is how you can define straight tabs:
+let g:airline#extensions#tabline#left_sep = '>'
+let g:airline#extensions#tabline#left_alt_sep = '>>'
+"
+let g:airline_left_sep='>'
+let g:airline_right_sep='<'
+"
+" This enables Vim's and neovim's syntax-related features. Without this, some
+" VimTeX features will not work (see ":help vimtex-requirements" for more
+" info).
+syntax enable
+
+" Viewer options: One may configure the viewer either by specifying a built-in
+" viewer method:
+"let g:vimtex_view_method = 'sumatra'
+
+" Or with a generic interface:
+"let g:vimtex_view_general_viewer = 'okular'
+"let g:vimtex_view_general_options = '--unique file:@pdf\#src:@line@tex'
+
+let g:vimtex_view_general_viewer = 'SumatraPDF'
+let g:vimtex_view_general_options = '-reuse-instance -forward-search @tex @line @pdf'
+let g:vimtex_view_general_options_latexmk = '-reuse-instance'
+
+" VimTeX uses latexmk as the default compiler backend. If you use it, which is
+" strongly recommended, you probably don't need to configure anything. If you
+" want another compiler backend, you can change it as follows. The list of
+" supported backends and further explanation is provided in the documentation,
+" see ":help vimtex-compiler".
+let g:vimtex_compiler_method = 'latexrun'
+
+" Most VimTeX mappings rely on localleader and this can be changed with the
+" following line. The default is usually fine and is the symbol "\".
+let maplocalleader = ","
